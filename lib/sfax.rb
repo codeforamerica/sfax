@@ -23,13 +23,13 @@ module SFax
     end
 
     # Accepts the file to send and sends it to fax_number.
-    def send_fax(fax_number, file, name = "")
+    def send_fax(fax_number, file, name = "", optional_params = {})
       return if file.nil? || fax_number.nil?
 
       connection = SFax::Connection.outgoing
       fax = fax_number[-11..-1] || fax_number
 
-      path = @path.send_fax(fax, name)
+      path = @path.send_fax(fax, name, optional_params)
       response = connection.post path do |req|
         req.body = {}
         req.body['file'] = Faraday::UploadIO.new(open(file), 

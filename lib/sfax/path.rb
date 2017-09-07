@@ -6,14 +6,17 @@ module SFax
       @api_key = api_key
     end
 
-    def send_fax(fax, name)
+    def send_fax(fax, name, optional_params = {})
+      optional_params_string = optional_params.map do |key, value|
+        "#{key}=#{URI.escape(value)}"
+      end.join(';')
       parts = [
         "sendfax?",
         "token=#{CGI.escape(@token)}",
         "ApiKey=#{CGI.escape(@api_key)}",
         "RecipientFax=#{fax}",
         "RecipientName=#{name}",
-        "OptionalParams=&"
+        "OptionalParams=#{optional_params_string}&"
       ]
       '/api/' + parts.join('&')
     end
