@@ -4,6 +4,7 @@ require 'sfax/path'
 require 'sfax/version'
 require 'faraday'
 require 'json'
+require 'time'
 
 module SFax
   class Faxer
@@ -32,7 +33,7 @@ module SFax
       path = @path.send_fax(fax, name, optional_params)
       response = connection.post path do |req|
         req.body = {}
-        req.body['file'] = Faraday::UploadIO.new(open(file), 
+        req.body['file'] = Faraday::UploadIO.new(open(file),
           'application/pdf', "#{Time.now.utc.iso8601}.pdf")
       end
 
@@ -78,6 +79,13 @@ module SFax
 
       connection = SFax::Connection.incoming
       path = @path.download_fax(fax_id)
+      response = connection.get path
+      response.body
+    end
+
+    def get_failed_faxes
+      path = @path.fax_statuses
+      connection = SFax::Connection.incoming
       response = connection.get path
       response.body
     end

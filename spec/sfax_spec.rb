@@ -51,4 +51,12 @@ describe SFax do
       end
     end
   end
+
+  describe '#get_failed_faxes' do
+    let(:fake_faraday_response) { double('faraday_response', body: outbound_fax_response) }
+
+    it 'returns an array of later doc submitter IDs that have failed' do
+      expect(faxer.get_failed_faxes).to match_array(["13660", "13688"])
+    end
+  end
 end
