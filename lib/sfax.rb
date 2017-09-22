@@ -83,11 +83,11 @@ module SFax
       response.body
     end
 
-    def get_failed_faxes
-      path = @path.fax_statuses
+    def get_fax_statuses(hours: 24)
+      path = @path.fax_statuses(hours: hours)
       connection = SFax::Connection.incoming
       response = connection.get path
-      response.body
+      parsed = JSON.parse(response.body)
     end
   end
 end

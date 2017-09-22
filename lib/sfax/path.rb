@@ -51,12 +51,12 @@ module SFax
       '/api/' + parts.join('&')
     end
 
-    def fax_statuses
+    def fax_statuses(hours: 24)
       parts = [
           "receiveoutboundfax?",
           "token=#{CGI.escape(@token)}",
           "ApiKey=#{CGI.escape(@api_key)}",
-          "startdateutc=#{(Time.now - (3600 * 24)).utc.iso8601}",
+          "startdateutc=#{(Time.now - (3600 * hours)).utc.iso8601}",
           "enddateutc=#{Time.now.utc.iso8601}"
       ]
       '/api/' + parts.join('&')
